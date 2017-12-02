@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <LangVersion>Latest</LangVersion>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview2-final"/>
+    <PackageReference Include="Npgsql" Version="3.2.5"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Yaml" Version="2.0.0-preview2"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0-preview2-final"/>
+    <PackageReference Include="Dapper" Version="1.50.4"/>
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.4.1"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="appsettings.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Update="**/*.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

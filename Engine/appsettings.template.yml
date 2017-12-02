@@ -1,0 +1,12 @@
+Website:
+  UseHttps: false
+  RequireHttps: false
+  Host: localhost
+  Port: 5000
+
+Database:
+  Host: localhost
+  Port: 5432
+  Username: postgres
+  Password: 
+  Database: RedInk

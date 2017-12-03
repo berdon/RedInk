@@ -7,10 +7,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Engine.Configuration;
 using Engine.Core;
+using Engine.Middleware;
 using Engine.Plugin;
+using Engine.Service;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,12 +29,21 @@ namespace Engine
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options => {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+            services.AddAuthentication()
+                .AddCookieAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
             services.AddSingleton<IEngine, Core.Engine>();
-            services.AddTransient<IDbConnection>(provider =>
+            services.AddScoped<IDbConnection>(provider =>
                 new Npgsql.NpgsqlConnection(Configuration.Database.ConnectionString()));
             services.AddSingleton<IPluginManager, MockPluginManager>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<UserMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +54,9 @@ namespace Engine
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
+            app.UseMiddleware<UserMiddleware>();
+
             app.UseMvc(routeBuilder => {
                 engine.Initialize(app, routeBuilder);
 
@@ -48,7 +65,7 @@ namespace Engine
                 }
 
                 foreach (var plugin in pluginManager.Plugins<IMvcPlugin>()) {
-                    plugin.Initialize(routeBuilder);
+                    plugin.Initialize(engine);
                 }
 
                 routeBuilder.MapRoute(

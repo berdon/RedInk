@@ -1,0 +1,6 @@
+@model Engine.ViewModel.PluginViewModel;
+@{
+    Layout = "_Layout";
+}
+
+@await Component.InvokeAsync(Model.ViewComponent, Model.Arguments)

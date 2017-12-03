@@ -9,20 +9,19 @@ namespace BlogPlugin
 {
     public class BlogPlugin : IMvcPlugin
     {
-        public BlogPlugin(IEngine engine) {
-            
-        }
-
-        public void Initialize(IRouteBuilder builder)
+        public void Initialize(IEngine engine)
         {
-            builder.MapRoute(
-                name: "post",
-                template: "blog/{*postName}",
-                defaults: new {
-                    controller = "Post",
-                    action = "Index"
-                }
-            );
+            engine.Admin.RegisterMenuCategory(new MenuCategory {
+                DisplayName = "Posts",
+                Items = new List<MenuCategoryItem>(new [] {
+                    new MenuCategoryItem {
+                        DisplayName = "View Posts",
+                        ViewComponent = typeof(AdminViewPostsViewComponent)
+                    }
+                })
+            });
+            engine.MapRoute("editPost", "blog/{postName}/edit", "PostIndex", true);
+            engine.MapRoute("post", "blog/{postName}", "PostIndex");
         }
     }
 }

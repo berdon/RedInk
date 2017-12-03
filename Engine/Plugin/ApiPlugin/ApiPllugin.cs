@@ -1,6 +1,9 @@
 using System;
+using System.Security.Cryptography;
 using Engine.Core;
+using Engine.Extensions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
@@ -24,10 +27,14 @@ namespace Engine.Plugin.ApiPlugin
                 "Track Package Route",
                 "package/{operation:regex(^(track|create|detonate)$)}/{id:int}");
 
-            routeBuilder.MapGet("hello/{name}", context =>
+            routeBuilder.MapGet("hash/{password}", context =>
             {
-                var name = context.GetRouteValue("name");
-                return context.Response.WriteAsync($"Hi, {name}!");
+                var password = context.GetRouteValue("password") as string;
+
+                string salt = null;
+                var hash = password.Hash(ref salt);
+
+                return context.Response.WriteAsync($"{hash}|{salt}");
             });
 
             var routes = routeBuilder.Build();

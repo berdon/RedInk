@@ -6,6 +6,6 @@ namespace Engine.Plugin
 {
     public interface IMvcPlugin : IPlugin
     {
-        void Initialize(IRouteBuilder builder);
+        void Initialize(IEngine engine);
     }
 }

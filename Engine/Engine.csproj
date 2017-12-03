@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0-preview2-final"/>
     <PackageReference Include="Dapper" Version="1.50.4"/>
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.4.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="2.0.0-preview2-final"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="appsettings.yml">

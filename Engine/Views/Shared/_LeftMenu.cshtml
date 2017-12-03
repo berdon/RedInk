@@ -1,0 +1,7 @@
+@using Engine.Model;
+@using Engine.Extensions;
+
+@if (Context.User.Identity.IsAuthenticated)
+{
+    @Html.Raw(Context.User().Email)
+}

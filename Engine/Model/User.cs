@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Engine.Model
 {
-    public class User : IIdentity
+    public class User : IIdentity, IModel
     {
         public long Id { get; set; }
 

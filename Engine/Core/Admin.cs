@@ -5,7 +5,7 @@ namespace Engine.Core
 {
     public class Admin : IAdmin
     {
-        public IList<MenuCategory> Menu => throw new System.NotImplementedException();
+        public IList<MenuCategory> Menu { get; set; } = new List<MenuCategory>();
 
         internal Admin(IInternalEngine internalEngine) {
             internalEngine.MapMvcRoute(
@@ -16,7 +16,7 @@ namespace Engine.Core
 
         public void RegisterMenuCategory(MenuCategory menuCategory)
         {
-            throw new System.NotImplementedException();
+            Menu.Add(menuCategory);
         }
     }
 }

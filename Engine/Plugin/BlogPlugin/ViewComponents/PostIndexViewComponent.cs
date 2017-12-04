@@ -8,22 +8,16 @@ using BlogPlugin.ViewModels;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace BlogPlugin.Controllers
 {
     public class PostIndexViewComponent : ViewComponent
     {
-        private readonly IDbConnection _connection;
-
-        public PostIndexViewComponent(IDbConnection connection)
+        public async Task<IViewComponentResult> InvokeAsync([FromServices] IDbConnection connection, string postName)
         {
-            _connection = connection;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync(string postName)
-        {
-            _connection.Open();
-            var post = await _connection.QueryFirstOrDefaultAsync<Post>(
+            connection.Open();
+            var post = await connection.QueryFirstOrDefaultAsync<Post>(
                 "select * from plugins_blogplugin_posts where is_published = true and title = @postName",
             new { postName });
 
@@ -33,7 +27,7 @@ namespace BlogPlugin.Controllers
             }
 
             return View(
-                "/Plugin/BlogPlugin/Views/Post/Index.cshtml",
+                "/Plugin/BlogPlugin/Views/Post.cshtml",
                 new PostViewModel
                 {
                     Post = post

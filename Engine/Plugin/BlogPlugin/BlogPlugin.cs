@@ -4,6 +4,7 @@ using Engine.Plugin;
 using System.Collections.Generic;
 using Engine.Core.Models;
 using Engine.Core;
+using BlogPlugin.ViewComponents;
 
 namespace BlogPlugin
 {

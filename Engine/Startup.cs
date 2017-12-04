@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Engine.Configuration;
 using Engine.Core;
+using Engine.Layout;
 using Engine.Middleware;
 using Engine.Plugin;
 using Engine.Service;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +37,9 @@ namespace Engine
                     .Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<ILayoutComponentHelper, LayoutComponentHelper>();
             services.AddAuthentication()
                 .AddCookieAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -42,6 +47,7 @@ namespace Engine
             services.AddScoped<IDbConnection>(provider =>
                 new Npgsql.NpgsqlConnection(Configuration.Database.ConnectionString()));
             services.AddSingleton<IPluginManager, MockPluginManager>();
+            services.AddSingleton<ILayoutManager, MockLayoutManager>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<UserMiddleware>();
         }

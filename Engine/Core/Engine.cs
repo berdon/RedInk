@@ -12,23 +12,18 @@ namespace Engine.Core
         private IRouteBuilder _mvcRouteBuilder;
         private IApplicationBuilder _app;
         private IRouteBuilder _internalRouteBuilder;
-        private readonly IServiceProvider _provider;
-
-        public Engine(IAdmin admin)
-        {
-            this.Admin = admin;
-
-        }
         public IAdmin Admin { get; private set; }
+
+        public Engine() { }
 
         public void Initialize(IApplicationBuilder app, IRouteBuilder builder)
         {
-            Admin = ActivatorUtilities.CreateInstance<Admin>(_provider, this);
-
             _app = app;
             _mvcRouteBuilder = builder;
 
             _internalRouteBuilder = new RouteBuilder(app);
+            
+            Admin = new Admin(this);
         }
 
         public IEngine MapMvcRoute(string name, string template)
@@ -52,6 +47,7 @@ namespace Engine.Core
                 constraints: null,
                 dataTokens: new
                 {
+                    RouteName = name,
                     ViewComponent = viewComponent,
                     RequireAuthenticated = requireAuthenticated
                 }

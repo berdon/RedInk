@@ -1,0 +1,12 @@
+@inject Engine.Layout.ILayoutComponentHelper Layout
+@using Engine.Extensions;
+
+<div class="header">
+    @await Layout.ContainerAsync(Component, "header")
+</div>
+<div style="background: red">
+    @await Layout.ContentAsync(Component);
+</div>
+<div class="footer">
+    @await Layout.ContainerAsync(Component, "footer")
+</div>
